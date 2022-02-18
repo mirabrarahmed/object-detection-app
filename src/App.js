@@ -59,7 +59,7 @@ function App() {
   if(isLoading) return <h1>Model is loading..</h1>
   return (
     <div className="App">
-      <h1>Image Identification</h1>
+      <h1>Object Detection</h1>
       <div className="input-holder">
         <input type='file' accept='image/*' capture='camera' className='upload-input' onChange={uploadImage}/>
         <span>OR</span>
@@ -75,29 +75,30 @@ function App() {
                                         right: 0,
                                         textAlign: "center",
                                         zindex: 9,
-                                        width: 640,
-                                        height: 480,}} src={imageUrl} alt='Preview' crossOrigin='anonymous' ref={imageRef} />}
+                                        width: 560,
+                                        height: 400,}} src={imageUrl} alt='Preview' crossOrigin='anonymous' ref={imageRef} />}
               <canvas
-          ref={canvasRef}
-          style={{
-            position: "absolute",
-            marginLeft: "auto",
-            marginRight: "auto",
-            left: 0,
-            right: 0,
-            textAlign: "center",
-            zindex: 8,
-            width: 640,
-            height: 480,
-          }}
-        />
+                ref={canvasRef}
+                style={{
+                  position: "absolute",
+                  marginLeft: "auto",
+                  marginRight: "auto",
+                  left: 0,
+                  right: 0,
+                  textAlign: "center",
+                  zindex: 8,
+                  width: 560,
+                  height: 400,
+                }}
+              />
               
             </div>
+            {imageUrl && <button type="button" className="btn btn-primary px-2 me-md-2 my-4" onClick={identify}>Identify Objects</button>  }
             {results.length > 0 && <div className='result'>
                 {<>
                   <ul>
                     {results.map((result, index) => {
-                      return <li key={result.class}><span>Name: {result.class.toUpperCase()}</span><span> Confidence Level: {(result.score * 100).toFixed(2)}%</span></li> 
+                      return <li><span>Detected: {result.class.toUpperCase()}</span><span> Confidence Level: {(result.score * 100).toFixed(2)}%</span></li> 
                     })
                     }
                   </ul>
@@ -105,7 +106,6 @@ function App() {
                 }
               </div>}
           </div>
-          <button type="button" className='class="btn btn-primary px-2 me-md-2"' onClick={identify}>Identify Image</button>  
         </div>
       </div>
     </div>
