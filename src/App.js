@@ -8,7 +8,6 @@ function App() {
   const [model, setModel] = useState(null)
   const [imageUrl, setImageUrl] = useState(null)
   const [results, setResults] = useState([])
-  const [canvasPic, setCanvasPic] = useState(null)
 
   const imageRef = useRef()
   const inputRef = useRef()
