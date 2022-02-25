@@ -2,12 +2,14 @@ import * as tf from "@tensorflow/tfjs"
 import * as cocossd from "@tensorflow-models/coco-ssd"
 import { useEffect, useState, useRef } from 'react';
 import { drawRect } from "./components/utilities";
+import LoadingPage from "./components/LoadingPage";
 
 function App() {
   const [isLoading, setIsLoading] = useState(false)
   const [model, setModel] = useState(null)
   const [imageUrl, setImageUrl] = useState(null)
   const [results, setResults] = useState([])
+  const [color, setColor] = useState("#123abc")
 
   const imageRef = useRef()
   const inputRef = useRef()
@@ -56,7 +58,7 @@ function App() {
   }, [])
 
   
-  if(isLoading) return <h1>Model is loading..</h1>
+  if(isLoading) return <LoadingPage isLoading={isLoading} color={color} />
   return (
     <div className="App">
       <h1>Object Detection</h1>
@@ -66,6 +68,18 @@ function App() {
         <input type='text' placeholder='Paste Image URL' ref={inputRef} onChange={urlChange} />
         <div className="wrapper">
           <div className="main-content">
+              {imageUrl && <button type="button" className="btn btn-primary px-2 me-md-2 my-4" onClick={identify}>Identify Objects</button>  }
+              {results.length > 0 && <div className='result'>
+                  {<>
+                    <ul>
+                      {results.map((result, index) => {
+                        return <li><span>Detected: {result.class.toUpperCase()}</span><span> Confidence Level: {(result.score * 100).toFixed(2)}%</span></li> 
+                      })
+                      }
+                    </ul>
+                  </> 
+                  }
+                </div>}
             <div className="image">
             
               {imageUrl && <img style={{position: "absolute",
@@ -76,7 +90,7 @@ function App() {
                                         textAlign: "center",
                                         zindex: 9,
                                         width: 560,
-                                        height: 400,}} src={imageUrl} alt='Preview' crossOrigin='anonymous' ref={imageRef} />}
+                                        height: 500,}} src={imageUrl} alt='Preview' crossOrigin='anonymous' ref={imageRef} />}
               <canvas
                 ref={canvasRef}
                 style={{
@@ -88,23 +102,11 @@ function App() {
                   textAlign: "center",
                   zindex: 8,
                   width: 560,
-                  height: 400,
+                  height: 500,
                 }}
               />
               
             </div>
-            {imageUrl && <button type="button" className="btn btn-primary px-2 me-md-2 my-4" onClick={identify}>Identify Objects</button>  }
-            {results.length > 0 && <div className='result'>
-                {<>
-                  <ul>
-                    {results.map((result, index) => {
-                      return <li><span>Detected: {result.class.toUpperCase()}</span><span> Confidence Level: {(result.score * 100).toFixed(2)}%</span></li> 
-                    })
-                    }
-                  </ul>
-                </> 
-                }
-              </div>}
           </div>
         </div>
       </div>
